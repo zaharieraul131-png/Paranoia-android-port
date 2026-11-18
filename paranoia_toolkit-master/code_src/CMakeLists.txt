@@ -6,7 +6,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/paranoia_toolkit-master/code_src")
 
-# Macro-uri necesare pentru compatibilitatea GoldSrc / Xash3D pe Linux/Android
 add_definitions(
     -DCLIENT_WEAPONS
     -Dstricmp=strcasecmp
@@ -51,7 +50,6 @@ file(GLOB SERVER_SOURCES
     "${SRC_DIR}/game_shared/*.cpp"
 )
 
-# Excludem fișierele specifice Windows dacă există
 list(FILTER SERVER_SOURCES EXCLUDE REGEX ".*win32.*")
 
 add_library(hl SHARED ${SERVER_SOURCES})
