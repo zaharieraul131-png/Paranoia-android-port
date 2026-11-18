@@ -30,9 +30,8 @@ inline void MESSAGE_BEGIN( int msg_dest, int msg_type, const float *pOrigin, ent
 extern globalvars_t				*gpGlobals;
 
 // Use this instead of ALLOC_STRING on constant strings
-#define STRING(offset)		(const char *)(gpGlobals->pStringBase + (int)offset)
-#define MAKE_STRING(str)	((int)((intptr_t)str - (intptr_t)STRING(0)))
-
+#define STRING(offset)		(*g_engfuncs.pfnSzFromIndex)(offset)
+#define MAKE_STRING(str)	(*g_engfuncs.pfnAllocString)(str)
 
 inline edict_t *FIND_ENTITY_BY_CLASSNAME(edict_t *entStart, const char *pszName) 
 {
