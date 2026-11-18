@@ -29,9 +29,9 @@ jobs:
             -DANDROID_PLATFORM=android-21 \
             -DCMAKE_BUILD_TYPE=Release
 
-      - name: Build Shared Libraries
-        run: cmake --build build-arm64
-
+          - name: Build Shared Libraries
+          run: cmake --build build-arm64 -- -k 0
+     
       - name: Upload Compiled .so Artifacts
         uses: actions/upload-artifact@v4
         with:
