@@ -7,6 +7,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/paranoia_toolkit-master/code_src")
 
 add_compile_options(
+    -fcommon
     -Wno-writable-strings
     -Wno-write-strings
     -Wno-c++11-narrowing
@@ -53,6 +54,7 @@ target_include_directories(client PRIVATE
 )
 
 target_compile_definitions(client PRIVATE CLIENT_DLL)
+target_link_options(client PRIVATE -Wl,--allow-multiple-definition -Wl,--unresolved-symbols=ignore-all)
 target_link_libraries(client log m)
 set_target_properties(client PROPERTIES PREFIX "")
 
@@ -79,5 +81,6 @@ target_include_directories(hl PRIVATE
 )
 
 target_compile_definitions(hl PRIVATE VALVE_DLL)
+target_link_options(hl PRIVATE -Wl,--allow-multiple-definition -Wl,--unresolved-symbols=ignore-all)
 target_link_libraries(hl log m)
 set_target_properties(hl PROPERTIES PREFIX "")
