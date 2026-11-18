@@ -716,8 +716,9 @@ enum
 };
 
 
-typedef int	func_t;
-typedef int	string_t;
+#include <stdint.h>
+typedef intptr_t func_t;
+typedef intptr_t string_t;
 
 typedef unsigned char 		byte;
 typedef unsigned short 		word;
