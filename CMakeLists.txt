@@ -10,6 +10,7 @@ add_compile_options(
     -Wno-writable-strings
     -Wno-write-strings
     -fpermissive
+    -include "${CMAKE_SOURCE_DIR}/android_gl/port_fixes.h"
 )
 
 add_definitions(
@@ -20,10 +21,6 @@ add_definitions(
     -D_snprintf=snprintf
     -D_vsnprintf=vsnprintf
     -DNO_VOICEGAMEMGR
-    "-D__declspec(x)=__attribute__((visibility(\"default\")))"
-    -D__stdcall=
-    -D__cdecl=
-    -D__fastcall=
 )
 
 # --- 1. CLIENT LIBRARY (client.so) ---
