@@ -36,7 +36,7 @@ file(GLOB CLIENT_SOURCES
     "${SRC_DIR}/game_shared/*.cpp"
 )
 
-list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*_Sample\\.cpp$")
+list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*(_Sample|inputw32|soundsystem|overview)\\.cpp$")
 
 add_library(client SHARED ${CLIENT_SOURCES})
 
@@ -64,7 +64,7 @@ file(GLOB SERVER_SOURCES
     "${SRC_DIR}/game_shared/*.cpp"
 )
 
-list(FILTER SERVER_SOURCES EXCLUDE REGEX ".*win32.*")
+list(FILTER SERVER_SOURCES EXCLUDE REGEX ".*(win32|shotgun)\\.cpp$")
 
 add_library(hl SHARED ${SERVER_SOURCES})
 
@@ -75,6 +75,7 @@ target_include_directories(hl PRIVATE
     "${SRC_DIR}/engine"
     "${SRC_DIR}/pm_shared"
     "${SRC_DIR}/game_shared"
+    "${SRC_DIR}/utils/vgui/include"
 )
 
 target_compile_definitions(hl PRIVATE VALVE_DLL)
