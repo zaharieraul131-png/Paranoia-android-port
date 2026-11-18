@@ -9,6 +9,9 @@ set(SRC_DIR "${CMAKE_SOURCE_DIR}/paranoia_toolkit-master/code_src")
 add_compile_options(
     -Wno-writable-strings
     -Wno-write-strings
+    -Wno-c++11-narrowing
+    -Wno-pointer-to-int-cast
+    -Wno-int-to-pointer-cast
     -fpermissive
     -include "${CMAKE_SOURCE_DIR}/android_gl/port_fixes.h"
 )
