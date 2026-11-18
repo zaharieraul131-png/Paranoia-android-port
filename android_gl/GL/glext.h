@@ -1,3 +1,13 @@
+#define GL_BLUE                           0x1905
+#define GL_RED_BITS                       0x0D52
+#define GL_GREEN_BITS                     0x0D53
+#define GL_BLUE_BITS                      0x0D54
+#define GL_ALPHA_BITS                     0x0D55
+#define GL_DEPTH_BITS                     0x0D56
+#define GL_STENCIL_BITS                   0x0D57
+#define GL_DSDT_NV                        0x86F5
+#define GL_DSDT8_NV                       0x8709
+
 #ifndef ANDROID_GLEXT_WRAPPER_H
 #define ANDROID_GLEXT_WRAPPER_H
 
