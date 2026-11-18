@@ -18,24 +18,23 @@ jobs:
         with:
           ndk-version: r25c
 
-      - name: Install CMake and Ninja
-        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
-
       - name: Configure CMake (arm64-v8a)
-        run: cmake -B build-arm64 -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_PLATFORM=android-21 -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build-arm64 -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-21 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-Dint=intptr_t"
 
-      - name: Build Shared Libraries
+      - name: Build Shared Libraries (arm64-v8a)
         run: |
           if ! ninja -C build-arm64 -k 0 > build.log 2>&1; then
             grep -n "error:" build.log | head -n 60 >> $GITHUB_STEP_SUMMARY
             grep -n "error:" build.log | head -n 60
             exit 1
           fi
-          
+          mkdir -p dist/arm64-v8a
+          cp build-arm64/client.so dist/arm64-v8a/libclient.so
+          cp build-arm64/hl.so dist/arm64-v8a/libspirit.so
 
-      - name: Upload Compiled .so Artifacts
+      - name: Upload Compiled arm64 .so Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: paranoia-android-arm64
-          path: build-arm64/**/*.so
+          path: dist/arm64-v8a/*.so
           
