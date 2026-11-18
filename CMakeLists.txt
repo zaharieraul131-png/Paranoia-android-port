@@ -20,6 +20,10 @@ add_definitions(
     -D_snprintf=snprintf
     -D_vsnprintf=vsnprintf
     -DNO_VOICEGAMEMGR
+    "-D__declspec(x)=__attribute__((visibility(\"default\")))"
+    -D__stdcall=
+    -D__cdecl=
+    -D__fastcall=
 )
 
 # --- 1. CLIENT LIBRARY (client.so) ---
@@ -31,9 +35,12 @@ file(GLOB CLIENT_SOURCES
     "${SRC_DIR}/game_shared/*.cpp"
 )
 
+list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*_Sample\\.cpp$")
+
 add_library(client SHARED ${CLIENT_SOURCES})
 
 target_include_directories(client PRIVATE
+    "${CMAKE_SOURCE_DIR}/android_gl"
     "${SRC_DIR}/cl_dll"
     "${SRC_DIR}/cl_dll/hl"
     "${SRC_DIR}/common"
@@ -42,7 +49,6 @@ target_include_directories(client PRIVATE
     "${SRC_DIR}/pm_shared"
     "${SRC_DIR}/game_shared"
     "${SRC_DIR}/utils/vgui/include"
-    "${CMAKE_SOURCE_DIR}/android_gl"
 )
 
 target_compile_definitions(client PRIVATE CLIENT_DLL)
@@ -62,6 +68,7 @@ list(FILTER SERVER_SOURCES EXCLUDE REGEX ".*win32.*")
 add_library(hl SHARED ${SERVER_SOURCES})
 
 target_include_directories(hl PRIVATE
+    "${CMAKE_SOURCE_DIR}/android_gl"
     "${SRC_DIR}/dlls"
     "${SRC_DIR}/common"
     "${SRC_DIR}/engine"
