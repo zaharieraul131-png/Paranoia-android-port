@@ -6,6 +6,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/paranoia_toolkit-master/code_src")
 
+add_compile_options(
+    -Wno-writable-strings
+    -Wno-write-strings
+    -fpermissive
+)
+
 add_definitions(
     -DCLIENT_WEAPONS
     -Dstricmp=strcasecmp
