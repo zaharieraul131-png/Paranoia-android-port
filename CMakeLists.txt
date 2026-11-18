@@ -28,7 +28,7 @@ add_definitions(
     -DNO_VOICEGAMEMGR
 )
 
-# --- 1. CLIENT LIBRARY (libclient.so) ---
+# --- 1. CLIENT LIBRARY (client.so) ---
 file(GLOB CLIENT_SOURCES
     "${SRC_DIR}/cl_dll/*.cpp"
     "${SRC_DIR}/cl_dll/*.c"
@@ -37,7 +37,7 @@ file(GLOB CLIENT_SOURCES
     "${SRC_DIR}/game_shared/*.cpp"
 )
 
-list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*(_Sample|inputw32|soundsystem|overview|vgui_.*|voice_.*)\\.cpp$")
+list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*(_Sample|inputw32|soundsystem|overview)\\.cpp$")
 
 add_library(client SHARED ${CLIENT_SOURCES})
 
@@ -58,7 +58,7 @@ target_link_options(client PRIVATE -Wl,--allow-multiple-definition)
 target_link_libraries(client log m)
 set_target_properties(client PROPERTIES PREFIX "")
 
-# --- 2. SERVER LIBRARY (libspirit.so) ---
+# --- 2. SERVER LIBRARY (hl.so) ---
 file(GLOB SERVER_SOURCES
     "${SRC_DIR}/dlls/*.cpp"
     "${SRC_DIR}/dlls/*.c"
