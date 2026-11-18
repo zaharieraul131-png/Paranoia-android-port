@@ -12,6 +12,7 @@ add_compile_options(
     -Wno-c++11-narrowing
     -Wno-pointer-to-int-cast
     -Wno-int-to-pointer-cast
+    -Wno-format-security
     -fpermissive
     -include "${CMAKE_SOURCE_DIR}/android_gl/port_fixes.h"
 )
