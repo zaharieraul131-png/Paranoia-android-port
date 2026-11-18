@@ -42,6 +42,7 @@ target_include_directories(client PRIVATE
     "${SRC_DIR}/pm_shared"
     "${SRC_DIR}/game_shared"
     "${SRC_DIR}/utils/vgui/include"
+    "${CMAKE_SOURCE_DIR}/android_gl"
 )
 
 target_compile_definitions(client PRIVATE CLIENT_DLL)
