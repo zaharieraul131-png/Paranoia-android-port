@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">PARANOIA: Android</string>
+	<string name="version_string" translatable="false">v1.2.3</string>
+
+    <string name="launch_button">Launch PARANOIA!</string>
+    <string name="cmd_args_text">Command line arguments(experts only)</string>
+
+    <string name="about_copyright">FWGS is not affiliated with Valve or any of their partners. All copyrights reserved to their respective owners.</string>
+	<!-- Seems Android skips any line breaks and tabs here. -->
+    <string name="about_authors">
+	</string>
+	<string name="about_links">
+		&#8226; <a href="http://paranoia.level-design.ru">PARANOIA Website</a>\n
+		&#8226; <a href="https://xash.su">Flying With Gauss</a>
+	</string>
+    <string name="about_button">About</string>
+    
+    <string name="text_tab1">Normal</string>
+    <string name="text_tab2">Advanced</string>
+    <string name="text_res_tittle2">Normal settings</string>
+    <string name="text_res_tittle3">Advanced settings</string>
+    <string name="volume">Volume buttons mode</string>
+    <string name="use_volume">Default action</string>
+    <string name="no_volume">Use in game</string>
+	
+	<string name="update_button">Check updates on start</string>
+	<string name="update_to_beta">Update to unstable version if available</string>
+	<string name="update_message">%s is available! Download it now!</string>
+	<string name="update">Update</string>
+	<string name="cancel">Cancel</string>
+	<string name="ok">Ok</string>
+	<string name="no_updates">No updates was found</string>
+	<string name="checking_updates">Working...</string>
+	<string name="immersive_mode">Enable Immersive Mode(fullscreen, KitKat or higher)</string>
+	
+
+	<string name="write_failed">Write test has failed</string>
+	
+	<string name="ask_about_new_basedir_msg">Move your game files somewhere else, for example Android/data/in.celest.xash3d.hl or internal memory. At next run I will ask you about folder again.</string>
+	<!--<string name="lollipop_request_permission_msg">Due to writing politics of newer Android versions, you need to select a root folder of storage where game data is located.</string>
+	<string name="lollipop_select_folder_btn">Select folder</string>-->
+	
+	<!-- These strings must be concat with a "ask_about_new_basedir" string -->
+	<string name="lollipop_request_permission_fail_msg">Write test has been failed twice. </string>
+	<string name="lollipop_write_fail_msg">Due to writing politics of newer Android versions, you can\'t use this storage. </string>
+	<string name="kitkat_write_fail_msg">Due to writing politics of Android 4.4, you can\'t use this storage. </string>
+	<string name="readonly_fs_fail_msg">Seems you have read-only filesystem. </string>
+</resources>
