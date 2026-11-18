@@ -28,7 +28,7 @@ add_definitions(
     -DNO_VOICEGAMEMGR
 )
 
-# --- 1. CLIENT LIBRARY (client.so) ---
+# --- 1. CLIENT LIBRARY (libclient.so) ---
 file(GLOB CLIENT_SOURCES
     "${SRC_DIR}/cl_dll/*.cpp"
     "${SRC_DIR}/cl_dll/*.c"
@@ -37,7 +37,7 @@ file(GLOB CLIENT_SOURCES
     "${SRC_DIR}/game_shared/*.cpp"
 )
 
-list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*(_Sample|inputw32|soundsystem|overview)\\.cpp$")
+list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*(_Sample|inputw32|soundsystem|overview|vgui_.*|voice_.*)\\.cpp$")
 
 add_library(client SHARED ${CLIENT_SOURCES})
 
@@ -54,11 +54,11 @@ target_include_directories(client PRIVATE
 )
 
 target_compile_definitions(client PRIVATE CLIENT_DLL)
-target_link_options(client PRIVATE -Wl,--allow-multiple-definition -Wl,--unresolved-symbols=ignore-all)
+target_link_options(client PRIVATE -Wl,--allow-multiple-definition)
 target_link_libraries(client log m)
 set_target_properties(client PROPERTIES PREFIX "")
 
-# --- 2. SERVER LIBRARY (hl.so) ---
+# --- 2. SERVER LIBRARY (libspirit.so) ---
 file(GLOB SERVER_SOURCES
     "${SRC_DIR}/dlls/*.cpp"
     "${SRC_DIR}/dlls/*.c"
@@ -66,7 +66,7 @@ file(GLOB SERVER_SOURCES
     "${SRC_DIR}/game_shared/*.cpp"
 )
 
-list(FILTER SERVER_SOURCES EXCLUDE REGEX ".*(win32|shotgun)\\.cpp$")
+list(FILTER SERVER_SOURCES EXCLUDE REGEX ".*(win32|shotgun|vgui_.*|voice_.*)\\.cpp$")
 
 add_library(hl SHARED ${SERVER_SOURCES})
 
@@ -81,6 +81,6 @@ target_include_directories(hl PRIVATE
 )
 
 target_compile_definitions(hl PRIVATE VALVE_DLL)
-target_link_options(hl PRIVATE -Wl,--allow-multiple-definition -Wl,--unresolved-symbols=ignore-all)
+target_link_options(hl PRIVATE -Wl,--allow-multiple-definition)
 target_link_libraries(hl log m)
 set_target_properties(hl PROPERTIES PREFIX "")
