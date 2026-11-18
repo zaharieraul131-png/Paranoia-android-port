@@ -60,9 +60,10 @@ typedef int BOOL;
 #endif //_WIN32
 
 // Header file containing definition of globalvars_t and entvars_t
-typedef int	func_t;					//
-typedef int	string_t;				// from engine's pr_comp.h;
-typedef float vec_t;				// needed before including progdefs.h
+#include <stdint.h>
+typedef intptr_t	func_t;					//
+typedef intptr_t	string_t;				// from engine's pr_comp.h;
+typedef float vec_t;				//
 
 // Vector class
 #include "vector.h"
