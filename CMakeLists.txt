@@ -7,6 +7,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/paranoia_toolkit-master/code_src")
 
 add_compile_options(
+    -g
     -fcommon
     -Wno-writable-strings
     -Wno-write-strings
@@ -35,6 +36,7 @@ file(GLOB CLIENT_SOURCES
     "${SRC_DIR}/cl_dll/hl/*.cpp"
     "${SRC_DIR}/pm_shared/*.c"
     "${SRC_DIR}/game_shared/*.cpp"
+    "${CMAKE_SOURCE_DIR}/android_gl/crash_guard.cpp"
 )
 
 list(FILTER CLIENT_SOURCES EXCLUDE REGEX ".*(_Sample|inputw32|soundsystem|overview)\\.cpp$")
@@ -54,8 +56,8 @@ target_include_directories(client PRIVATE
 )
 
 target_compile_definitions(client PRIVATE CLIENT_DLL)
-target_link_options(client PRIVATE -Wl,--allow-multiple-definition)
-target_link_libraries(client log m)
+target_link_options(client PRIVATE -Wl,--allow-multiple-definition -Wl,--export-dynamic)
+target_link_libraries(client log m dl)
 set_target_properties(client PROPERTIES PREFIX "")
 
 # --- 2. SERVER LIBRARY (hl.so) ---
@@ -64,6 +66,7 @@ file(GLOB SERVER_SOURCES
     "${SRC_DIR}/dlls/*.c"
     "${SRC_DIR}/pm_shared/*.c"
     "${SRC_DIR}/game_shared/*.cpp"
+    "${CMAKE_SOURCE_DIR}/android_gl/crash_guard.cpp"
 )
 
 list(FILTER SERVER_SOURCES EXCLUDE REGEX ".*(win32|shotgun|vgui_.*|voice_.*)\\.cpp$")
@@ -81,6 +84,6 @@ target_include_directories(hl PRIVATE
 )
 
 target_compile_definitions(hl PRIVATE VALVE_DLL)
-target_link_options(hl PRIVATE -Wl,--allow-multiple-definition)
-target_link_libraries(hl log m)
+target_link_options(hl PRIVATE -Wl,--allow-multiple-definition -Wl,--export-dynamic)
+target_link_libraries(hl log m dl)
 set_target_properties(hl PROPERTIES PREFIX "")
