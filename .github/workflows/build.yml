@@ -12,6 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Unleash Code Raccoon (Auto-Audit & Source Patcher)
+        run: |
+          python3 raccoon_fixer.py
+          cat raccoon_report.md >> $GITHUB_STEP_SUMMARY
+
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         id: setup-ndk
@@ -40,11 +45,13 @@ jobs:
           mkdir -p dist/arm64-v8a
           cp build-arm64/client.so dist/arm64-v8a/libparanoia_client_android_arm64.so
           cp build-arm64/hl.so dist/arm64-v8a/libparanoia_spirit_android_arm64.so
-          echo "### Deep Compiler Bug Audit (64-bit / Memory Hazards)" >> $GITHUB_STEP_SUMMARY
-          grep -E "warning:.*(null|uninitialized|bounds|int-to-pointer|pointer-to-int|return-type)" build.log | head -n 40 >> $GITHUB_STEP_SUMMARY || echo "No critical memory hazards flagged." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Compiler Static Analysis Findings" >> $GITHUB_STEP_SUMMARY
+          grep -E "warning:.*(null|uninitialized|bounds|int-to-pointer|pointer-to-int|return-type)" build.log | head -n 40 >> $GITHUB_STEP_SUMMARY || echo "No critical compiler hazards flagged." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Compiled arm64 .so Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: paranoia-android-arm64
           path: dist/arm64-v8a/*.so
+          
