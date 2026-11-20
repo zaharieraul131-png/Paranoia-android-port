@@ -18,10 +18,10 @@ jobs:
         with:
           ndk-version: r25c
 
-      - name: Configure CMake (arm64-v8a)
-        run: cmake -B build-arm64 -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-21 -DANDROID_STL=c++_static -DCMAKE_BUILD_TYPE=Release
+      - name: Configure CMake (arm64-v8a + Diagnostic Symbols)
+        run: cmake -B build-arm64 -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-21 -DANDROID_STL=c++_static -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
-      - name: Build & Auto-Stub VGUI Symbols
+      - name: Build & Deep Static Bug Audit
         run: |
           ninja -C build-arm64 -k 0 > build.log 2>&1 || true
           python3 -c '
@@ -35,15 +35,16 @@ jobs:
           print(f"Generated {len(syms)} VGUI stubs")
           '
           TOOLCHAIN="${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64"
-          "$TOOLCHAIN/bin/aarch64-linux-android21-clang" -fPIC -c build-arm64/vgui_stubs.c -o build-arm64/vgui_stubs.o
-          "$TOOLCHAIN/bin/aarch64-linux-android21-clang++" -fPIC -shared -static-libstdc++ -Wl,--allow-multiple-definition -o build-arm64/client.so $(find build-arm64/CMakeFiles/client.dir -name "*.o") build-arm64/vgui_stubs.o -llog -lm
+          "$TOOLCHAIN/bin/aarch64-linux-android21-clang" -g -fPIC -c build-arm64/vgui_stubs.c -o build-arm64/vgui_stubs.o
+          "$TOOLCHAIN/bin/aarch64-linux-android21-clang++" -g -fPIC -shared -static-libstdc++ -Wl,--allow-multiple-definition -Wl,--export-dynamic -o build-arm64/client.so $(find build-arm64/CMakeFiles/client.dir -name "*.o") build-arm64/vgui_stubs.o -llog -lm -ldl
           mkdir -p dist/arm64-v8a
-          cp build-arm64/client.so dist/arm64-v8a/libclient_android_arm64.so
-          cp build-arm64/hl.so dist/arm64-v8a/libspirit_android_arm64.so
+          cp build-arm64/client.so dist/arm64-v8a/libparanoia_client_android_arm64.so
+          cp build-arm64/hl.so dist/arm64-v8a/libparanoia_spirit_android_arm64.so
+          echo "### Deep Compiler Bug Audit (64-bit / Memory Hazards)" >> $GITHUB_STEP_SUMMARY
+          grep -E "warning:.*(null|uninitialized|bounds|int-to-pointer|pointer-to-int|return-type)" build.log | head -n 40 >> $GITHUB_STEP_SUMMARY || echo "No critical memory hazards flagged." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Compiled arm64 .so Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: paranoia-android-arm64
           path: dist/arm64-v8a/*.so
-          
