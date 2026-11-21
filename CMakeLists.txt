@@ -27,6 +27,7 @@ add_definitions(
     -D_snprintf=snprintf
     -D_vsnprintf=vsnprintf
     -DNO_VOICEGAMEMGR
+    -DMUSIC_XASH
 )
 
 # --- 1. CLIENT LIBRARY (client.so) ---
