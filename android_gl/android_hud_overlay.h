@@ -2,7 +2,7 @@
 #define ANDROID_HUD_OVERLAY_H
 
 struct AndroidOverlayMsg {
-    char text;
+    char text[2048];
     float dieTime;
     float yNorm;
     int r, g, b;
@@ -10,7 +10,7 @@ struct AndroidOverlayMsg {
 
 static AndroidOverlayMsg g_AndroidSubtitles = {{0}, 0, 0.84f, 255, 245, 200};
 static AndroidOverlayMsg g_AndroidBanner = {{0}, 0, 0.24f, 140, 230, 255};
-static char g_AndroidMissionDoc = {0};
+static char g_AndroidMissionDoc[4096] = {0};
 static float g_AndroidMissionEnd = 0.0f;
 
 extern "C" inline void Android_SetMissionText(const char* rawText) {
@@ -39,10 +39,10 @@ static inline void Android_PushOverlay(AndroidOverlayMsg& slot, client_textmessa
 }
 
 static inline void Android_DrawWrappedText(const char* text, float yNorm, int r, int g, int b, bool centerBox) {
-    if (!text || !text) return;
+    if (!text || !text[0]) return;
     int maxChars = (ScreenWidth > 800) ? 72 : 48;
     int lineH = (gHUD.m_scrinfo.iCharHeight > 0) ? gHUD.m_scrinfo.iCharHeight + 4 : 22;
-    char lines;
+    char lines[24][96];
     int numLines = 0;
     const char* p = text;
     while (*p && numLines < 24) {
