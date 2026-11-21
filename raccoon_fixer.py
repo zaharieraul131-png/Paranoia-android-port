@@ -1,4 +1,4 @@
-import os, re, glob
+import os, re
 
 SRC = "paranoia_toolkit-master/code_src"
 report = []
@@ -25,7 +25,7 @@ def patch_all():
     p = f"{SRC}/dlls/nodes.cpp"
     c = open(p, encoding="latin1").read()
     c, n = re.subn(r'(int\s+CGraph\s*::\s*FindShortestPath\s*\([^)]*\)\s*\{)',
-                   r'\1\n\tif (!m_fGraphPresent || !m_pNodes || !m_pRouteInfo || iStart < 0 || iStart >= m_cNodes || iDest < 0 || iDest >= m_cNodes) return 0;', c, 1)
+                   r'\1\n\tif (!m_fGraphPresent || !m_pNodes || !m_pRouteInfo || iStart < 0 || iStart >= m_cNodes || iDest < 0 || iDest >= m_cNodes) return 0;', c, count=1)
     open(p, "w", encoding="latin1").write(c)
     log(p, 0, "AI-FIX", f"Added bounds guard to CGraph::FindShortestPath ({n})")
 
@@ -41,9 +41,9 @@ def patch_all():
     p = f"{SRC}/cl_dll/gl_rsurf.cpp"
     lns = open(p, encoding="latin1").readlines()
     if len(lns) >= 1010:
-        lns = re.sub(r'\[\s*64\s*\]', '', lns)
+        lns[1009] = re.sub(r'\[\s*64\s*\]', '[63]', lns[1009])
         open(p, "w", encoding="latin1").writelines(lns)
-        log(p, 1010, "MEM-OOB", "Fixed out-of-bounds array index ->")
+        log(p, 1010, "MEM-OOB", "Fixed out-of-bounds array index [64]->[63]")
 
     # 5. message.cpp native subtitles, intro titles, tips & mission docs
     p = f"{SRC}/cl_dll/message.cpp"
@@ -55,7 +55,7 @@ def patch_all():
     draw_code = """float now = gEngfuncs.GetClientTime();
 	if (g_AndroidSubtitles.dieTime > now) { Android_DrawWrappedText(g_AndroidSubtitles.text, g_AndroidSubtitles.yNorm, 255, 245, 200, true); drawn++; }
 	if (g_AndroidBanner.dieTime > now) { Android_DrawWrappedText(g_AndroidBanner.text, g_AndroidBanner.yNorm, 140, 230, 255, true); drawn++; }
-	if (g_AndroidMissionEnd > now && g_AndroidMissionDoc) { Android_DrawWrappedText(g_AndroidMissionDoc, 0.45f, 220, 255, 220, false); drawn++; }
+	if (g_AndroidMissionEnd > now && g_AndroidMissionDoc[0]) { Android_DrawWrappedText(g_AndroidMissionDoc, 0.45f, 220, 255, 220, false); drawn++; }
 	if ( !drawn )"""
     c = c.replace("if ( !drawn )", draw_code, 1)
     open(p, "w", encoding="latin1").write(c)
